@@ -13,3 +13,16 @@ vim.opt.expandtab = true
 vim.opt.smartindent = true
 
 vim.g.mapleader = " "
+
+vim.g.clipboard = {
+    name = 'WSLclipboard',
+    copy = {
+        ["+"] = 'win32yank.exe -i --crlf',
+        ["*"] = 'win32yank.exe -i --crlf',
+    },
+    paste = {
+        ["+"] = 'win32yank.exe -o --lf',
+        ["*"] = 'win32yank.exe -o --lf',
+    },
+    cache_enabled = true,
+}
