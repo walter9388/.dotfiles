@@ -48,10 +48,11 @@ fi
 
 
 #### nvim ####
-read -p "Do you want to install neovim configuration, plugins and themes? [y/n] " -n 1 -r
+read -p "Do you want to install neovim/tmux configuration, plugins and themes? [y/n] " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+    ### nvim
     # ubuntu
     sudo apt install software-properties-common
     sudo add-apt-repository ppa:neovim-ppa/stable
@@ -78,7 +79,33 @@ then
     ## if you need to redownload win32yank, get it from here:
     # curl -sLo/tmp/win32yank.zip https://github.com/equalsraf/win32yank/releases/download/v0.0.4/win32yank-x64.zip
     # unzip -p /tmp/win32yank.zip win32yank.exe > /tmp/win32yank.exe
+
+
+
+    ### tmux
+    sudo apt install tmux
+
+    # link .tmux dir to ~/.tmux
+    ln -s "$PWD/.tmux.conf" ~/.tmux.conf
+
+    # install tpm (tmux package manager)
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
+
+    ## Ignore for now... this can be run from inside tmux instead...
+    # i.e. run tmux source ~/.tmux.conf or :source-file ~/.tmux.conf inside tmux
+    #      then do prefix + I to install all the plugins
+
+    # # source .tmux.conf
+    # tmux source ~/.tmux.conf
+
+    # # install plugins from .tmux.conf (same as prefix + I when inside tmux)
+    # ~/.tmux/plugins/tpm/scripts/install_plugins.sh
 fi
 
 #### Link stuff ####
-#ln -s "$PWD/.gitconfig" ~/.gitconfig
+# gitconfig
+ln -s "$PWD/.gitconfig" ~/.gitconfig
+# profile is the same for bash (.profile) or zsh (.zprofile)
+ln -s "$PWD/.profile" ~/.profile
+ln -s "$PWD/.profile" ~/.zprofile
