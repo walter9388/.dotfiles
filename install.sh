@@ -13,6 +13,7 @@ which curl &>/dev/null
 which git &>/dev/null
 [ $? -eq 0 ] && echo "git found. Starting install.sh..." || (echo "git is not installed! Please install git." && read && exit 1)
 
+
 #### APT ####
 read -p "Do you want to install required packages via apt? [y/n] " -n 1 -r
 echo
@@ -26,6 +27,7 @@ then
     sudo apt install curl git build-essential cmake python3 python3-dev python3-pip 
 fi
 
+
 #### zsh ####
 read -p "Do you want to install zsh configuration? [y/n] " -n 1 -r
 echo
@@ -33,6 +35,16 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
     # install
     sudo apt install zsh zsh-syntax-highlighting autojump zsh-autosuggestions 
+
+    # use oh-my-zsh for themes
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    
+    # remove .zshrc created by oh-my-zsh
+    rm ~/.zshrc
+
+    # use custom theme
+    ln -s "$PWD/waldron.zsh-theme" ~/.oh-my-zsh/custom/themes/waldron.zsh-theme
+
     # link zsh files and dirs
     # mkdir -p ~/.zsh
     ln -s "$PWD/.zsh" ~/.zsh
@@ -44,7 +56,6 @@ then
     sudo sed -i s~$LINE_TO_BE_CHANGED~$NEW_LINE~g /etc/passwd
     echo "changed line in /etc/passwd from $LINE_TO_BE_CHANGED to $NEW_LINE"
 fi
-
 
 
 #### nvim ####
