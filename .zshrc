@@ -76,7 +76,13 @@ ZSH_THEME="waldron"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(
+git
+docker
+zsh-autosuggestions
+zsh-syntax-highlighting
+web-search
+)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -142,14 +148,14 @@ zmodload zsh/complist
 compinit
 _comp_options+=(globdots)               # Include hidden files.
 
-# Custom ZSH Binds
-bindkey '^ ' autosuggest-accept
+## Custom ZSH Binds
+#bindkey '^ ' autosuggest-accept
 
-# Load aliases and shortcuts if existent.
-[ -f "$HOME/zsh/aliasrc" ] && source "$HOME/zsh/aliasrc"
+## Load aliases and shortcuts if existent.
+#[ -f "$HOME/zsh/aliasrc" ] && source "$HOME/zsh/aliasrc"
 
-# Load ; should be last.
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
-source /usr/share/autojump/autojump.zsh 2>/dev/null
+## Load ; should be last.
+#source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
+#source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
+#source /usr/share/autojump/autojump.zsh 2>/dev/null
 

@@ -28,13 +28,22 @@ then
 fi
 
 
+#### Rust/Cargo #### (needed for tree-sitter in neovim)
+if [[ $REPLY =~ ^[Yy]$ ]];
+then
+    # install rust
+    curl https://sh.rustup.rs -sSf | sh
+fi
+
+
+
 #### zsh ####
 read -p "Do you want to install zsh configuration? [y/n] " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    # install
-    sudo apt install zsh zsh-syntax-highlighting autojump zsh-autosuggestions 
+    # install (plugins now done below and put in oh-my-zsh)
+    sudo apt install zsh # zsh-syntax-highlighting autojump zsh-autosuggestions 
 
     # use oh-my-zsh for themes
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -45,9 +54,13 @@ then
     # use custom theme
     ln -s "$PWD/waldron.zsh-theme" ~/.oh-my-zsh/custom/themes/waldron.zsh-theme
 
+    # install some plugins
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions # zsh-autosuggestions
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting # zsh-syntax-highlighting
+
     # link zsh files and dirs
     # mkdir -p ~/.zsh
-    ln -s "$PWD/.zsh" ~/.zsh
+    # ln -s "$PWD/.zsh" ~/.zsh
     ln -s "$PWD/.zshrc" ~/.zshrc
 
     # make zsh the default shell (change /bin/bash by my user to /bin/zsh in /etc/passwd)
@@ -67,7 +80,6 @@ then
     # ubuntu
     sudo apt install software-properties-common
     sudo add-apt-repository ppa:neovim-ppa/stable
-    sudo apt update
     sudo apt install neovim
 
     # link nvim dir to .config dir
@@ -80,6 +92,9 @@ then
     # Select nvim as default for vim
     sudo update-alternatives --set vim /usr/bin/nvim
     # if not sure of nvim path, check: `sudo update-alternatives --config vim`
+    
+    # install tree-sitter-cli for Packer below
+    cargo install tree-sitter-cli
     
     # install packer.lua (https://github.com/wbthomason/packer.nvim)
     git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim

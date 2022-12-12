@@ -12,8 +12,6 @@ vim.opt.expandtab = true
 
 vim.opt.smartindent = true
 
-vim.g.mapleader = " "
-
 vim.g.clipboard = {
     name = 'WSLclipboard',
     copy = {
@@ -26,3 +24,5 @@ vim.g.clipboard = {
     },
     cache_enabled = true,
 }
+
+vim.opt.termguicolors = true
