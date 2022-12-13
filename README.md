@@ -8,6 +8,12 @@ In bash terminal make install script executable (`chmod +x install.sh`), then ru
 sudo ./install.sh
 ```
 
+After this, there are a few packet managers that need things to happen:
+
+1. Packer (neovim package manager): Open up `~/.config/nvim/lua/vim_stuff/packer.lua` and the source the file (`:so`) and then run (`:PackerSync`).
+2. Mason (neovim LSP manager): In neovim, open Mason (`:Mason`) and make sure everything is installed.
+3. Tmux: tmux should source the `.tmux.conf` file automatically, but if not, run `tmux source ~/.tmux.conf`. Then, to install plugins, open tmux and run `prefix + I` and a popup should come up when things have been installed.
+
 ## Tutorials
 
 Most of the zsh, neovim and tmux stuff was take from this guy who made a youtube video on each subject:

@@ -63,15 +63,16 @@ then
     # ln -s "$PWD/.zsh" ~/.zsh
     ln -s "$PWD/.zshrc" ~/.zshrc
 
-    # make zsh the default shell (change /bin/bash by my user to /bin/zsh in /etc/passwd)
-    LINE_TO_BE_CHANGED=$(cat /etc/passwd | grep "${USER}:")
-    NEW_LINE=$(echo $LINE_TO_BE_CHANGED | sed "s/\/bin\/bash/\/bin\/zsh/g") 
-    sudo sed -i s~$LINE_TO_BE_CHANGED~$NEW_LINE~g /etc/passwd
-    echo "changed line in /etc/passwd from $LINE_TO_BE_CHANGED to $NEW_LINE"
+    ### this can be ignored now as oh-my-zsh asks you if you want to make zsh the default shell
+    # # make zsh the default shell (change /bin/bash by my user to /bin/zsh in /etc/passwd)
+    # LINE_TO_BE_CHANGED=$(cat /etc/passwd | grep "${USER}:")
+    # NEW_LINE=$(echo $LINE_TO_BE_CHANGED | sed "s/\/bin\/bash/\/bin\/zsh/g") 
+    # sudo sed -i s~$LINE_TO_BE_CHANGED~$NEW_LINE~g /etc/passwd
+    # echo "changed line in /etc/passwd from $LINE_TO_BE_CHANGED to $NEW_LINE"
 fi
 
 
-#### nvim ####
+#### nvim/tmux ####
 read -p "Do you want to install neovim/tmux configuration, plugins and themes? [y/n] " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
@@ -84,7 +85,7 @@ then
 
     # link nvim dir to .config dir
     mkdir -p ~/.config
-    ln -s nvim ~/.config/nvim
+    ln -s "$PWD/nvim" ~/.config/nvim
 
     ### make 'vim' open 'nvim'
     # Add my nvim command to the list of possible alternatives for the `vim` command
@@ -92,9 +93,6 @@ then
     # Select nvim as default for vim
     sudo update-alternatives --set vim /usr/bin/nvim
     # if not sure of nvim path, check: `sudo update-alternatives --config vim`
-    
-    # install tree-sitter-cli for Packer below
-    cargo install tree-sitter-cli
     
     # install packer.lua (https://github.com/wbthomason/packer.nvim)
     git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
@@ -106,6 +104,9 @@ then
     # curl -sLo/tmp/win32yank.zip https://github.com/equalsraf/win32yank/releases/download/v0.0.4/win32yank-x64.zip
     # unzip -p /tmp/win32yank.zip win32yank.exe > /tmp/win32yank.exe
 
+    # install tree-sitter-cli for Packer package tree-sitter
+    cargo install tree-sitter-cli
+    
 
 
     ### tmux
@@ -122,14 +123,22 @@ then
     # i.e. run tmux source ~/.tmux.conf or :source-file ~/.tmux.conf inside tmux
     #      then do prefix + I to install all the plugins
 
-    # # source .tmux.conf
-    # tmux source ~/.tmux.conf
+    # source .tmux.conf
+    tmux source ~/.tmux.conf
 
-    # # install plugins from .tmux.conf (same as prefix + I when inside tmux)
-    # ~/.tmux/plugins/tpm/scripts/install_plugins.sh
+    # install plugins from .tmux.conf (same as prefix + I when inside tmux)
+    ~/.tmux/plugins/tpm/scripts/install_plugins.sh
 fi
 
 #### Link stuff ####
+read -p "Do you want to remove any existing dotfiles (e.g. .gitconfig, .profile, etc.)? [y/n] " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    rm -f ~/.gitconfig
+    rm -f ~/.profile
+    rm -f ~/.zprofile
+fi
 # gitconfig
 ln -s "$PWD/.gitconfig" ~/.gitconfig
 # profile is the same for bash (.profile) or zsh (.zprofile)
