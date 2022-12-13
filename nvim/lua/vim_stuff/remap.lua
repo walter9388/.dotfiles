@@ -1,12 +1,12 @@
 -- inspired from https://github.com/josean-dev/dev-environment-files/blob/main/.config/nvim/lua/josean/core/keymaps.lua
 
-
 -- set leader set to space
 vim.g.mapleader = " "
 
 -- do mappings (n is for in normal mode, i for insert mode etc.)
 local nnoremap = require("vim_stuff.keymap").nnoremap
 local inoremap = require("vim_stuff.keymap").inoremap
+local vnoremap = require("vim_stuff.keymap").vnoremap
 
 ---------------------
 -- General Keymaps
@@ -39,6 +39,16 @@ nnoremap("<leader>tx", ":tabclose<CR>") -- close current tab
 nnoremap("<leader>tn", ":tabn<CR>") --  go to next tab
 nnoremap("<leader>tp", ":tabp<CR>") --  go to previous tab
 
+-- stay in visual mode after indenting
+vnoremap("<", "<gv")
+vnoremap(">", ">gv")
+
+-- when going up/down half pages or going through search, recentre in the middle
+nnoremap("<C-d>", "<C-d>zz")
+nnoremap("<C-u>", "<C-u>zz")
+nnoremap("n", "nzzzv")
+nnoremap("N", "Nzzzv")
+
 ----------------------
 -- Plugin Keybinds
 ----------------------
@@ -62,5 +72,31 @@ nnoremap("<leader>gfc", "<cmd>Telescope git_bcommits<cr>") -- list git commits f
 nnoremap("<leader>gb", "<cmd>Telescope git_branches<cr>") -- list git branches (use <cr> to checkout) ["gb" for git branch]
 nnoremap("<leader>gs", "<cmd>Telescope git_status<cr>") -- list current changes per file with diff preview ["gs" for git status]
 
--- -- restart lsp server (not on youtube nvim video)
--- nnoremap("<leader>rs", ":LspRestart<CR>") -- mapping to restart lsp if necessary
+-- restart lsp server (not on youtube nvim video)
+nnoremap("<leader>rs", ":LspRestart<CR>") -- mapping to restart lsp if necessary
+
+-- format with ALT+f if formater exists in null_ls / lsp
+inoremap("<Esc>F", "<cmd>lua vim.lsp.buf.format({ timeout_ms = 10000 })<cr>", { silent = true })
+nnoremap("<Esc>F", "<cmd>lua vim.lsp.buf.format({ timeout_ms = 10000 })<cr>", { silent = true })
+vnoremap("<Esc>F", "<cmd>lua vim.lsp.buf.format({ timeout_ms = 10000 })<cr>gv", { silent = true })
+-- inoremap("<Esc>F", "<cmd>update<cr>", { silent = true })
+-- nnoremap("<Esc>F", "<cmd>update<cr>", { silent = true })
+-- vnoremap("<Esc>F", "<cmd>update<cr>gv", { silent = true })
+
+-- ALT+j/k to move line down/up (https://vim.fandom.com/wiki/Moving_lines_up_or_down)
+nnoremap("<Esc>j", ":m .+1<CR>==")
+nnoremap("<Esc>k", ":m .-2<CR>==")
+inoremap("<Esc>j", "<Esc>:m .+1<CR>==gi")
+inoremap("<Esc>k", "<Esc>:m .-2<CR>==gi")
+vnoremap("<Esc>j", ":m '>+1<CR>gv=gv")
+vnoremap("<Esc>k", ":m '<-2<CR>gv=gv")
+
+-- ALT+J/K to move line down/up
+nnoremap("<Esc>J", "Yp==")
+nnoremap("<Esc>K", "YP==")
+inoremap("<Esc>J", "<Esc>YP==gi")
+inoremap("<Esc>K", "<Esc>Yp==gi")
+inoremap("<Esc>K", "<Esc>Yp==gi")
+vnoremap("<Esc>J", "YPgv=gv")
+vnoremap("<Esc>K", "YPgv=gv") -- no idea how to do this properly!?
+-- vnoremap("<Esc>K", '<C-u>line("\'>") - line("\'<") + 1<cr>')
