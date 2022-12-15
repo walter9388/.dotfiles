@@ -49,6 +49,24 @@ nnoremap("<C-u>", "<C-u>zz")
 nnoremap("n", "nzzzv")
 nnoremap("N", "Nzzzv")
 
+-- ALT+j/k to move line down/up (https://vim.fandom.com/wiki/Moving_lines_up_or_down)
+nnoremap("<Esc>j", ":m .+1<CR>==")
+nnoremap("<Esc>k", ":m .-2<CR>==")
+inoremap("<Esc>j", "<Esc>:m .+1<CR>==gi")
+inoremap("<Esc>k", "<Esc>:m .-2<CR>==gi")
+vnoremap("<Esc>j", ":m '>+1<CR>gv=gv")
+vnoremap("<Esc>k", ":m '<-2<CR>gv=gv")
+
+-- ALT+J/K to move line down/up
+nnoremap("<Esc>J", "Yp==")
+nnoremap("<Esc>K", "YP==")
+inoremap("<Esc>J", "<Esc>YP==gi")
+inoremap("<Esc>K", "<Esc>Yp==gi")
+inoremap("<Esc>K", "<Esc>Yp==gi")
+vnoremap("<Esc>J", "YPgv=gv")
+vnoremap("<Esc>K", "YPgv=gv") -- no idea how to do this properly!?
+-- vnoremap("<Esc>K", '<C-u>line("\'>") - line("\'<") + 1<cr>')
+
 ----------------------
 -- Plugin Keybinds
 ----------------------
@@ -83,20 +101,11 @@ vnoremap("<Esc>F", "<cmd>lua vim.lsp.buf.format({ timeout_ms = 10000 })<cr>gv", 
 -- nnoremap("<Esc>F", "<cmd>update<cr>", { silent = true })
 -- vnoremap("<Esc>F", "<cmd>update<cr>gv", { silent = true })
 
--- ALT+j/k to move line down/up (https://vim.fandom.com/wiki/Moving_lines_up_or_down)
-nnoremap("<Esc>j", ":m .+1<CR>==")
-nnoremap("<Esc>k", ":m .-2<CR>==")
-inoremap("<Esc>j", "<Esc>:m .+1<CR>==gi")
-inoremap("<Esc>k", "<Esc>:m .-2<CR>==gi")
-vnoremap("<Esc>j", ":m '>+1<CR>gv=gv")
-vnoremap("<Esc>k", ":m '<-2<CR>gv=gv")
-
--- ALT+J/K to move line down/up
-nnoremap("<Esc>J", "Yp==")
-nnoremap("<Esc>K", "YP==")
-inoremap("<Esc>J", "<Esc>YP==gi")
-inoremap("<Esc>K", "<Esc>Yp==gi")
-inoremap("<Esc>K", "<Esc>Yp==gi")
-vnoremap("<Esc>J", "YPgv=gv")
-vnoremap("<Esc>K", "YPgv=gv") -- no idea how to do this properly!?
--- vnoremap("<Esc>K", '<C-u>line("\'>") - line("\'<") + 1<cr>')
+-- diagnostics
+nnoremap("<leader>do", "<cmd>lua vim.diagnostic.open_float()<CR>", { silent = true }) -- open error/warning texts in floating window
+nnoremap("<leader>d[", "<cmd>lua vim.diagnostic.goto_prev()<CR>", { silent = true }) -- go to previous error/warning
+nnoremap("<leader>d]", "<cmd>lua vim.diagnostic.goto_next()<CR>", { silent = true }) -- go to next error/warning
+-- The following command requires plug-ins "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim", and optionally "kyazdani42/nvim-web-devicons" for icon support
+nnoremap("<leader>dd", "<cmd>Telescope diagnostics<CR>", { silent = true }) -- open error/warnings in telescope window
+-- If you don't want to use the telescope plug-in but still want to see all the errors/warnings, comment out the telescope line and uncomment this:
+-- nnoremap('<leader>dd', '<cmd>lua vim.diagnostic.setloclist()<CR>', { silent = true })
