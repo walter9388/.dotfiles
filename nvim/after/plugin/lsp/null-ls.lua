@@ -20,6 +20,7 @@ null_ls.setup({
 		formatting.prettier, -- js/ts formatter
 		formatting.stylua, -- lua formatter
 		formatting.black, -- python formatter
+		formatting.rustfmt, -- rust formatter
 		diagnostics.eslint_d.with({ -- js/ts linter
 			-- only enable eslint if root has .eslintrc.js (not in youtube nvim video)
 			condition = function(utils)
@@ -28,6 +29,7 @@ null_ls.setup({
 		}),
 		-- diagnostics.mypy, -- python linter
 		diagnostics.flake8, --python linter
+		-- diagnostics.rust_analyzer, --rust linter -- this is done via rust-tools instead
 	},
 	-- configure format on save
 	on_attach = function(current_client, bufnr)

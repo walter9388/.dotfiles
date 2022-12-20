@@ -12,17 +12,20 @@ vim.opt.expandtab = true
 
 vim.opt.smartindent = true
 
-vim.g.clipboard = {
-    name = 'WSLclipboard',
-    copy = {
-        ["+"] = 'win32yank.exe -i --crlf',
-        ["*"] = 'win32yank.exe -i --crlf',
-    },
-    paste = {
-        ["+"] = 'win32yank.exe -o --lf',
-        ["*"] = 'win32yank.exe -o --lf',
-    },
-    cache_enabled = true,
-}
+vim.opt.scrolloff = 8
 
 vim.opt.termguicolors = true
+
+------ UNCOMMENT IF USING WSL (WINDOWS) ------
+-- vim.g.clipboard = {
+-- 	name = "WSLclipboard",
+-- 	copy = {
+-- 		["+"] = "win32yank.exe -i --crlf",
+-- 		["*"] = "win32yank.exe -i --crlf",
+-- 	},
+-- 	paste = {
+-- 		["+"] = "win32yank.exe -o --lf",
+-- 		["*"] = "win32yank.exe -o --lf",
+-- 	},
+-- 	cache_enabled = true,
+-- }

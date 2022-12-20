@@ -16,6 +16,13 @@ if not typescript_setup then
 	return
 end
 
+-- import rust-tools plugin safely
+local rusttools_status, rusttools = pcall(require, "rust-tools")
+if not rusttools_status then
+	print("something wrong with rust-tools plugin")
+	return
+end
+
 -- local keymap = vim.keymap -- for conciseness
 -- do mappings (n is for in normal mode, i for insert mode etc.)
 local nnoremap = require("vim_stuff.keymap").nnoremap
@@ -129,7 +136,30 @@ lspconfig["pyright"].setup({
 	},
 })
 
-lspconfig["rust_analyzer"].setup({
-	capabilities = capabilities,
-	on_attach = on_attach,
+rusttools.setup({
+	server = {
+		-- on_attach is a callback called when the language server attachs to the buffer
+		on_attach = on_attach,
+		capabilities = capabilities,
+		settings = {
+			-- to enable rust-analyzer settings visit:
+			-- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
+			["rust-analyzer"] = {
+				-- enable clippy on save
+				checkOnSave = {
+					enable = false,
+					-- command = "clippy",
+				},
+			},
+		},
+	},
+	-- tools = {
+	-- 	autoSetHints = true,
+	-- 	hover_with_actions = true,
+	-- 	inlay_hints = {
+	-- 		show_parameter_hints = false,
+	-- 		parameter_hints_prefix = "",
+	-- 		other_hints_prefix = "",
+	-- 	},
+	-- },
 })

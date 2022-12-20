@@ -7,6 +7,7 @@ vim.g.mapleader = " "
 local nnoremap = require("vim_stuff.keymap").nnoremap
 local inoremap = require("vim_stuff.keymap").inoremap
 local vnoremap = require("vim_stuff.keymap").vnoremap
+local xnoremap = require("vim_stuff.keymap").xnoremap
 
 ---------------------
 -- General Keymaps
@@ -66,6 +67,25 @@ inoremap("<Esc>K", "<Esc>Yp==gi")
 vnoremap("<Esc>J", "YPgv=gv")
 vnoremap("<Esc>K", "YPgv=gv") -- no idea how to do this properly!?
 -- vnoremap("<Esc>K", '<C-u>line("\'>") - line("\'<") + 1<cr>')
+
+-- Don't let cursor move when using J
+nnoremap("J", "mzJ`z")
+
+-- stops pasted over stuff going into register
+xnoremap("<leader>p", '"_dP')
+
+-- yank/delete into clipboard
+nnoremap("<leader>y", '"+y')
+vnoremap("<leader>y", '"+y')
+nnoremap("<leader>Y", '"+Y')
+nnoremap("<leader>d", '"_d')
+vnoremap("<leader>d", '"_d')
+
+-- replace current word globally
+nnoremap("<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+
+-- make current file executable
+nnoremap("<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
 ----------------------
 -- Plugin Keybinds
