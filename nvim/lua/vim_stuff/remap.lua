@@ -18,6 +18,7 @@ nnoremap("<leader>pv", "<cmd>Ex<CR>")
 
 -- use jk to exit insert mode
 inoremap("<leader>jk", "<ESC>")
+inoremap("<leader>kj", "<ESC>")
 
 -- clear search highlights
 nnoremap("<leader>nh", ":nohl<CR>")
