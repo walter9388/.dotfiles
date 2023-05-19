@@ -82,6 +82,7 @@ then
     sudo apt install software-properties-common
     sudo add-apt-repository ppa:neovim-ppa/stable
     sudo apt install neovim
+    sudo apt-get install ripgrep # needed for telescope live_grep
 
     # link nvim dir to .config dir
     mkdir -p ~/.config
