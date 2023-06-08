@@ -29,12 +29,23 @@ fi
 
 
 #### Rust/Cargo #### (needed for tree-sitter in neovim)
+read -p "Do you want to install Rust? [y/n] " -n 1 -r
+echo
 if [[ $REPLY =~ ^[Yy]$ ]];
 then
     # install rust
     curl https://sh.rustup.rs -sSf | sh
 fi
 
+
+#### nvm (node) #### 
+read -p "Do you want to install nvm for NodeJS? [y/n] " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]];
+then
+    # install nvm
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+fi
 
 
 #### zsh ####
