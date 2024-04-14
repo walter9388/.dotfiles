@@ -80,8 +80,16 @@ then
     ### nvim
     # ubuntu
     sudo apt install software-properties-common
-    sudo add-apt-repository ppa:neovim-ppa/stable
-    sudo apt install neovim
+    ## apt version is currently at 0.7 whereas I want 0.9
+    # sudo add-apt-repository ppa:neovim-ppa/stable
+    # sudo apt install neovim
+    ## Install via tarball
+    cd /tmp
+    curl -LO https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz
+    sudo rm -rf /opt/nvim /opt/nvim-linux64/
+    sudo tar -C /opt -xzf nvim-linux64.tar.gz
+    cd -
+
     sudo apt-get install ripgrep # needed for telescope live_grep
 
     # link nvim dir to .config dir
@@ -92,7 +100,8 @@ then
     # Add my nvim command to the list of possible alternatives for the `vim` command
     sudo update-alternatives  --install $(which vim) vim $(which nvim) 10
     # Select nvim as default for vim
-    sudo update-alternatives --set vim /usr/bin/nvim
+    # sudo update-alternatives --set vim /usr/bin/nvim
+    sudo update-alternatives --set vim /opt/nvim-linux64/bin/nvim
     # if not sure of nvim path, check: `sudo update-alternatives --config vim`
     
     # install packer.lua (https://github.com/wbthomason/packer.nvim)
