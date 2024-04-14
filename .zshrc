@@ -133,7 +133,8 @@ source $ZSH/oh-my-zsh.sh
 
 
 # Custom Variables
-EDITOR=vim
+export VISUAL=vim
+export EDITOR="$VISUAL"
 
 # History in cache directory:
 HISTSIZE=10000
