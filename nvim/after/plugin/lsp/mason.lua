@@ -42,8 +42,8 @@ mason_null_ls.setup({
 		"stylua", -- lua formatter
 		"eslint_d", -- ts/js linter
 		"black", -- python formatter
-		"mypy", -- python linter
-		"flake8", -- python linter
+		"mypy", -- python static analyzer
+		"ruff", -- python linter
 		"rustfmt", -- rust formatter
 	},
 	-- auto-install configured formatters & linters (with null-ls)

@@ -70,6 +70,8 @@ return require("packer").startup(function(use)
 
 	-- treesitter configuration
 	use({
+		-- Please make sure you install markdown and markdown_inline parser
+		-- (via `:TSInstall markdown markdown_inline`)
 		"nvim-treesitter/nvim-treesitter",
 		run = function()
 			local ts_update = require("nvim-treesitter.install").update({ with_sync = true })

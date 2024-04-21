@@ -27,14 +27,21 @@ null_ls.setup({
 				return utils.root_has_file(".eslintrc.js") -- change file extension if you use something else
 			end,
 		}),
-		-- diagnostics.mypy, -- python linter
-		diagnostics.flake8, --python linter
+		diagnostics.mypy.with({ -- python linter
+			-- need to get venv to pick up installed packages + library stubs (https://stackoverflow.com/a/76487663)
+			extra_args = function()
+				local virtual = os.getenv("VIRTUAL_ENV") or os.getenv("CONDA_PREFIX") or "/usr"
+				return { "--python-executable", virtual .. "/bin/python3" }
+			end,
+		}),
+		diagnostics.ruff, --python linter
 		-- diagnostics.rust_analyzer, --rust linter -- this is done via rust-tools instead
 	},
 	-- configure format on save
 	on_attach = function(current_client, bufnr)
 		if current_client.supports_method("textDocument/formatting") then
 			vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+			-- format on save
 			vim.api.nvim_create_autocmd("BufWritePre", {
 				group = augroup,
 				buffer = bufnr,
