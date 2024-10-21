@@ -47,7 +47,7 @@ local on_attach = function(client, bufnr)
 	nnoremap("<leader>o", "<cmd>LSoutlineToggle<CR>", opts) -- see outline on right hand side
 
 	-- typescript specific keymaps (e.g. rename file and update imports)
-	if client.name == "tsserver" then
+	if client.name == "ts_ls" then
 		nnoremap("<leader>rf", ":TypescriptRenameFile<CR>") -- rename file and update imports
 		nnoremap("<leader>oi", ":TypescriptOrganizeImports<CR>") -- organize imports (not in youtube nvim video)
 		nnoremap("<leader>ru", ":TypescriptRemoveUnused<CR>") -- remove unused variables (not in youtube nvim video)

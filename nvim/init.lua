@@ -1,4 +1,2 @@
-require("vim_stuff.set")
-require("vim_stuff.remap")
-
-print("Hello Waldronaton")
+-- bootstrap lazy.nvim, LazyVim and your plugins
+require("config.lazy")
