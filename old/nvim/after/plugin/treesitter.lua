@@ -33,6 +33,8 @@ treesitter.setup({
 		"gitignore",
 		"python",
 		"rust",
+		"astro",
+		"hcl",
 	},
 	-- auto install above language parsers
 	auto_install = true,

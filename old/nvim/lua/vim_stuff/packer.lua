@@ -68,6 +68,10 @@ return require("packer").startup(function(use)
 	use("jayp0521/mason-null-ls.nvim") -- bridges gap b/w mason & null-ls
 	use("sbdchd/neoformat") -- use :Neoformat to directly run prettier
 
+	-- python debugging
+	use("mfussenegger/nvim-dap")
+	use("mfussenegger/nvim-dap-python")
+
 	-- treesitter configuration
 	use({
 		-- Please make sure you install markdown and markdown_inline parser

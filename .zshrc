@@ -173,7 +173,3 @@ export NVM_DIR="$HOME/.nvm"
 #   *) export PATH="$PNPM_HOME:$PATH" ;;
 # esac
 # # pnpm end
-
-# neovim
-export PATH="$PATH:/opt/nvim-linux64/bin"
-alias vim=nvim # not sure if needed

@@ -1,12 +1,14 @@
 # .dotfiles
 
-### Install script
+# Install script
 
 In bash terminal make install script executable (`chmod +x install.sh`), then run as superuser with
 
 ```bash
-sudo ./install.sh
+sudo ./install
 ```
+
+## OLD (replaced with LazyVim installation)
 
 After this, there are a few packet managers that need things to happen:
 
@@ -24,7 +26,7 @@ Most of the zsh, neovim and tmux stuff was take from this guy who made a youtube
 
 I also threw in a bit of stuff I learnt from ThePrimeagen ([his .dotfiles are here](https://github.com/ThePrimeagen/.dotfiles)).
 
-## Fonts
+# Fonts
 
 I stole this script from [here](https://gist.github.com/matthewjberger/7dd7e079f282f8138a9dc3b045ebefa0?permalink_comment_id=4005789#gistcomment-4005789) in order to install a bunch of different nerdfonts.
 
@@ -43,4 +45,18 @@ Install "Sauce Code Pro Nerd Font" https://www.nerdfonts.com/font-downloads Unpa
 Optional. Open VSCode -> Ctrl+, -> fontFamily: type "SauseCodePro Nerd Font" before other fonts.
 
 You can do this with other fonts, but they need to support a powerline glyphs, e.g. "Mononoki" font.
+```
+
+# Docker Validation
+
+I build demo ubuntu setup with
+
+```bash
+docker build -t ubuntu-setup .
+```
+
+then run with
+
+```bash
+docker run -ti ubuntu-setup
 ```
