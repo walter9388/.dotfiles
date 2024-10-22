@@ -30,7 +30,13 @@ I also threw in a bit of stuff I learnt from ThePrimeagen ([his .dotfiles are he
 
 I stole this script from [here](https://gist.github.com/matthewjberger/7dd7e079f282f8138a9dc3b045ebefa0?permalink_comment_id=4005789#gistcomment-4005789) in order to install a bunch of different nerdfonts.
 
-I generally use DroidSansMonoNF (download here if you want it only: `https://github.com/ryanoasis/nerd-fonts/releases/download/v2.2.2/DroidSansMono.zip`).
+Install the fonts by running the fonts script:
+
+```bash
+./fonts
+```
+
+I generally use DroidSansMonoNF (download here if you want it only: `https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/DroidSansMono.zip`).
 
 You can then do something like `setfont ~/.local/share/fonts/{choose font from here}`.
 
