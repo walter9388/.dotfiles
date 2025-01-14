@@ -103,18 +103,18 @@ nnoremap("<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 -- -- nvim-tree
 -- nnoremap("<leader>e", ":NvimTreeToggle<CR>") -- toggle file explorer
 
--- telescope
-nnoremap("<leader>ff", "<cmd>Telescope find_files<cr>")  -- find files within current working directory, respects .gitignore
-nnoremap("<leader>fs", "<cmd>Telescope live_grep<cr>")   -- find string in current working directory as you type
-nnoremap("<leader>fc", "<cmd>Telescope grep_string<cr>") -- find string under cursor in current working directory
-nnoremap("<leader>fb", "<cmd>Telescope buffers<cr>")     -- list open buffers in current neovim instance
-nnoremap("<leader>fh", "<cmd>Telescope help_tags<cr>")   -- list available help tags
-
--- telescope git commands (not on youtube nvim video)
-nnoremap("<leader>gc", "<cmd>Telescope git_commits<cr>")   -- list all git commits (use <cr> to checkout) ["gc" for git commits]
-nnoremap("<leader>gfc", "<cmd>Telescope git_bcommits<cr>") -- list git commits for current file/buffer (use <cr> to checkout) ["gfc" for git file commits]
-nnoremap("<leader>gb", "<cmd>Telescope git_branches<cr>")  -- list git branches (use <cr> to checkout) ["gb" for git branch]
-nnoremap("<leader>gs", "<cmd>Telescope git_status<cr>")    -- list current changes per file with diff preview ["gs" for git status]
+-- -- telescope
+-- nnoremap("<leader>ff", "<cmd>Telescope find_files<cr>")  -- find files within current working directory, respects .gitignore
+-- nnoremap("<leader>fs", "<cmd>Telescope live_grep<cr>")   -- find string in current working directory as you type
+-- nnoremap("<leader>fc", "<cmd>Telescope grep_string<cr>") -- find string under cursor in current working directory
+-- nnoremap("<leader>fb", "<cmd>Telescope buffers<cr>")     -- list open buffers in current neovim instance
+-- nnoremap("<leader>fh", "<cmd>Telescope help_tags<cr>")   -- list available help tags
+--
+-- -- telescope git commands (not on youtube nvim video)
+-- nnoremap("<leader>gc", "<cmd>Telescope git_commits<cr>")   -- list all git commits (use <cr> to checkout) ["gc" for git commits]
+-- nnoremap("<leader>gfc", "<cmd>Telescope git_bcommits<cr>") -- list git commits for current file/buffer (use <cr> to checkout) ["gfc" for git file commits]
+-- nnoremap("<leader>gb", "<cmd>Telescope git_branches<cr>")  -- list git branches (use <cr> to checkout) ["gb" for git branch]
+-- nnoremap("<leader>gs", "<cmd>Telescope git_status<cr>")    -- list current changes per file with diff preview ["gs" for git status]
 
 -- restart lsp server (not on youtube nvim video)
 nnoremap("<leader>rs", ":LspRestart<CR>") -- mapping to restart lsp if necessary
@@ -132,7 +132,7 @@ nnoremap("<leader>do", "<cmd>lua vim.diagnostic.open_float()<CR>", { silent = tr
 nnoremap("<leader>d[", "<cmd>lua vim.diagnostic.goto_prev()<CR>", { silent = true })  -- go to previous error/warning
 nnoremap("<leader>d]", "<cmd>lua vim.diagnostic.goto_next()<CR>", { silent = true })  -- go to next error/warning
 -- The following command requires plug-ins "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim", and optionally "kyazdani42/nvim-web-devicons" for icon support
-nnoremap("<leader>dd", "<cmd>Telescope diagnostics<CR>", { silent = true })           -- open error/warnings in telescope window
+-- nnoremap("<leader>dd", "<cmd>Telescope diagnostics<CR>", { silent = true }) -- open error/warnings in telescope window
 -- If you don't want to use the telescope plug-in but still want to see all the errors/warnings, comment out the telescope line and uncomment this:
 -- nnoremap('<leader>dd', '<cmd>lua vim.diagnostic.setloclist()<CR>', { silent = true })
 

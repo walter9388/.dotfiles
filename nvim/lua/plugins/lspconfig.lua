@@ -11,9 +11,9 @@ return {
       init = function()
         require("lazyvim.util").lsp.on_attach(function(_, buffer)
           -- stylua: ignore
-          nnoremap("<leader>rf", ":TypescriptRenameFile<CR>") -- rename file and update imports
+          nnoremap("<leader>rf", ":TypescriptRenameFile<CR>")      -- rename file and update imports
           nnoremap("<leader>oi", ":TypescriptOrganizeImports<CR>") -- organize imports (not in youtube nvim video)
-          nnoremap("<leader>ru", ":TypescriptRemoveUnused<CR>") -- remove unused variables (not in youtube nvim video)
+          nnoremap("<leader>ru", ":TypescriptRemoveUnused<CR>")    -- remove unused variables (not in youtube nvim video)
         end)
       end,
     },
@@ -65,17 +65,43 @@ return {
     },
   },
 
-  -- LSP keymaps
+  -- -- LSP keymaps
+  -- {
+  --   "neovim/nvim-lspconfig",
+  --   opts = function()
+  --     local keys = require("lazyvim.plugins.lsp.keymaps").get()
+  --     -- change a keymap
+  --     keys[#keys + 1] = { "K", "<cmd>echo 'hello'<cr>" }
+  --     -- disable a keymap
+  --     keys[#keys + 1] = { "K", false }
+  --     -- add a keymap
+  --     keys[#keys + 1] = { "H", "<cmd>echo 'hello'<cr>" }
+  --   end,
+  -- },
+
+  -- JSON
   {
     "neovim/nvim-lspconfig",
-    opts = function()
-      local keys = require("lazyvim.plugins.lsp.keymaps").get()
-      -- change a keymap
-      keys[#keys + 1] = { "K", "<cmd>echo 'hello'<cr>" }
-      -- disable a keymap
-      keys[#keys + 1] = { "K", false }
-      -- add a keymap
-      keys[#keys + 1] = { "H", "<cmd>echo 'hello'<cr>" }
-    end,
+    opts = {
+      -- make sure mason installs the server
+      servers = {
+        jsonls = {
+          enable = false,
+          -- lazy-load schemastore when needed
+          on_new_config = function(new_config)
+            new_config.settings.json.schemas = new_config.settings.json.schemas or {}
+            vim.list_extend(new_config.settings.json.schemas, require("schemastore").json.schemas())
+          end,
+          settings = {
+            json = {
+              format = {
+                enable = false,
+              },
+              validate = { enable = true },
+            },
+          },
+        },
+      },
+    },
   },
 }
