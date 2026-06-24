@@ -1,0 +1,360 @@
+#!/bin/bash
+
+# =============================================================================
+# Mac Developer Setup Script
+# =============================================================================
+#
+# BEFORE RUNNING THIS SCRIPT:
+# ============================================================
+#
+# 1. INSTALL ITERM2
+#    - Download from https://iterm2.com or run after Homebrew is installed:
+#      brew install --cask iterm2
+#    - Open iTerm2 and use it instead of Terminal.app from here on
+#
+# 2. SET UP NERD FONTS (needed for tmux/neovim icons)
+#    - This script installs DroidSansMono Nerd Font via brew
+#    - After running, set the font in iTerm2:
+#      iTerm2 → Settings → Profiles → Text → Font
+#      Search for "DroidSansM Nerd Font" and select it
+#    - Recommended size: 13-14pt
+#
+# 3. SET UP ITERM2 HOTKEY WINDOW (optional but recommended)
+#    - iTerm2 → Settings → Keys → Hotkey
+#    - Enable "Show/hide all windows with a system-wide hotkey"
+#    - Set to Cmd+\ or Option+Space for instant terminal from anywhere
+#
+# 4. SET ITERM2 COLOUR SCHEME (optional)
+#    - iTerm2 → Settings → Profiles → Colors → Color Presets
+#    - Or download themes from https://iterm2colorschemes.com
+#
+# 5. CLONE YOUR DOTFILES REPO FIRST
+#    - mkdir ~/Developer
+#    - cd ~/Developer
+#    - gh repo clone <your-dotfiles-repo> dotfiles  (or git clone)
+#    - cd dotfiles
+#    - Run this script from inside your dotfiles folder:
+#      chmod +x install_mac.sh
+#      ./install_mac.sh
+#
+# NOTE: This script assumes Apple Silicon (M1/M2/M3). Homebrew installs
+# to /opt/homebrew on Apple Silicon (not /usr/local as on Intel Macs).
+#
+# =============================================================================
+
+set -e  # exit on error
+
+DOTFILES="$PWD"
+
+echo ""
+echo "================================================="
+echo "  Mac Developer Setup"
+echo "  Running from: $DOTFILES"
+echo "================================================="
+echo ""
+
+# -----------------------------------------------------------------------------
+# Checks
+# -----------------------------------------------------------------------------
+
+which curl &>/dev/null || (echo "curl is not installed!" && exit 1)
+which git &>/dev/null || (echo "git is not installed! Install Xcode Command Line Tools: xcode-select --install" && exit 1)
+
+# -----------------------------------------------------------------------------
+# Homebrew
+# -----------------------------------------------------------------------------
+
+read -p "Install Homebrew (Mac package manager)? [y/n] " -n 1 -r
+echo
+if [[ ${REPLY:-y} =~ ^[Yy]$ ]]; then
+  if ! command -v brew &>/dev/null; then
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    # Add brew to PATH for Apple Silicon (script will also tell you to do this)
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  else
+    echo "Homebrew already installed, skipping."
+  fi
+fi
+
+# -----------------------------------------------------------------------------
+# Core tools
+# -----------------------------------------------------------------------------
+
+read -p "Install core tools (git, gh, tmux, neovim, fzf, wget)? [y/n] " -n 1 -r
+echo
+if [[ ${REPLY:-y} =~ ^[Yy]$ ]]; then
+  brew install git gh tmux neovim fzf wget
+
+  # Install GNU versions of sed/grep (Linux-compatible flags)
+  brew install gnu-sed grep
+fi
+
+# -----------------------------------------------------------------------------
+# iTerm2
+# -----------------------------------------------------------------------------
+
+read -p "Install iTerm2? [y/n] " -n 1 -r
+echo
+if [[ ${REPLY:-y} =~ ^[Yy]$ ]]; then
+  brew install --cask iterm2
+  echo ""
+  echo "iTerm2 installed. Remember to:"
+  echo "  1. Set font: Settings → Profiles → Text → Font → DroidSansM Nerd Font"
+  echo "  2. Set hotkey: Settings → Keys → Hotkey"
+  echo "  3. Set colour scheme: Settings → Profiles → Colors → Color Presets"
+fi
+
+# -----------------------------------------------------------------------------
+# Nerd Fonts (required for tmux catppuccin icons)
+# -----------------------------------------------------------------------------
+
+read -p "Install Nerd Fonts? [y/n] " -n 1 -r
+echo
+if [[ ${REPLY:-y} =~ ^[Yy]$ ]]; then
+  # brew tap homebrew/cask-fonts
+  brew install --cask font-droid-sans-mono-nerd-font
+  # Uncomment any others you want:
+  # brew install --cask font-jetbrains-mono-nerd-font
+  # brew install --cask font-fira-code-nerd-font
+  # brew install --cask font-meslo-lg-nerd-font
+  echo ""
+  echo "Font installed. Set it in iTerm2:"
+  echo "  Settings → Profiles → Text → Font → search 'DroidSansM Nerd Font'"
+fi
+
+# -----------------------------------------------------------------------------
+# Raycast (Spotlight replacement - app launcher, clipboard history, etc.)
+# Uncomment to enable
+# -----------------------------------------------------------------------------
+
+# brew install --cask raycast
+# echo ""
+# echo "Raycast installed. To set up:"
+# echo "  1. Open Raycast (Cmd+Space, type Raycast)"
+# echo "  2. Follow setup wizard and set Cmd+Space as hotkey"
+# echo "  3. Disable Spotlight first: System Settings → Keyboard → Shortcuts → Spotlight"
+# echo "  4. Enable clipboard history in Raycast Extensions (Cmd+Shift+V)"
+
+# -----------------------------------------------------------------------------
+# Rectangle (window management)
+# Uncomment to enable
+# -----------------------------------------------------------------------------
+
+# brew install --cask rectangle
+# echo ""
+# echo "Rectangle installed. Open it (Cmd+Space, type Rectangle) and grant accessibility permissions."
+# echo "Key shortcuts:"
+# echo "  Ctrl+Option+Arrow    - snap to half screen"
+# echo "  Ctrl+Option+Return   - maximise"
+# echo "  Ctrl+Option+Cmd+Arrow - move to next monitor"
+
+# -----------------------------------------------------------------------------
+# Node (nvm)
+# -----------------------------------------------------------------------------
+
+read -p "Install nvm (Node version manager)? [y/n] " -n 1 -r
+echo
+if [[ ${REPLY:-y} =~ ^[Yy]$ ]]; then
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+fi
+
+# -----------------------------------------------------------------------------
+# Python (uv)
+# -----------------------------------------------------------------------------
+
+read -p "Install uv (Python package/version manager)? [y/n] " -n 1 -r
+echo
+if [[ ${REPLY:-y} =~ ^[Yy]$ ]]; then
+  brew install uv
+fi
+
+# -----------------------------------------------------------------------------
+# Rust (needed for tree-sitter in neovim)
+# Uncomment to enable
+# -----------------------------------------------------------------------------
+
+# curl https://sh.rustup.rs -sSf | sh -s -- -y
+
+# -----------------------------------------------------------------------------
+# Oh My Zsh
+# -----------------------------------------------------------------------------
+
+read -p "Install Oh My Zsh? [y/n] " -n 1 -r
+echo
+if [[ ${REPLY:-y} =~ ^[Yy]$ ]]; then
+  if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    # Install without auto-switching shell (we handle that)
+    RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  else
+    echo "Oh My Zsh already installed, skipping."
+  fi
+
+  # Install plugins
+  ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+
+  if [ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]; then
+    git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+  fi
+
+  if [ ! -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]; then
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
+  fi
+fi
+
+# -----------------------------------------------------------------------------
+# Symlink dotfiles
+# -----------------------------------------------------------------------------
+
+read -p "Symlink dotfiles from $DOTFILES? [y/n] " -n 1 -r
+echo
+if [[ ${REPLY:-y} =~ ^[Yy]$ ]]; then
+
+  # zsh
+  if [ -f "$DOTFILES/.zshrc" ]; then
+    rm -f ~/.zshrc
+    ln -s "$DOTFILES/.zshrc" ~/.zshrc
+    echo "Linked .zshrc"
+  fi
+
+  # oh-my-zsh custom theme
+  if [ -f "$DOTFILES/waldron.zsh-theme" ]; then
+    rm -f ~/.oh-my-zsh/custom/themes/waldron.zsh-theme
+    ln -s "$DOTFILES/waldron.zsh-theme" ~/.oh-my-zsh/custom/themes/waldron.zsh-theme
+    echo "Linked waldron.zsh-theme"
+  fi
+
+  # tmux
+  if [ -f "$DOTFILES/.tmux.conf" ]; then
+    rm -f ~/.tmux.conf
+    ln -s "$DOTFILES/.tmux.conf" ~/.tmux.conf
+    echo "Linked .tmux.conf"
+  fi
+
+  # neovim
+  if [ -d "$DOTFILES/nvim" ]; then
+    mkdir -p ~/.config
+    rm -rf ~/.config/nvim
+    ln -s "$DOTFILES/nvim" ~/.config/nvim
+    echo "Linked nvim config"
+  fi
+
+  # git
+  if [ -f "$DOTFILES/.gitconfig" ]; then
+    rm -f ~/.gitconfig
+    ln -s "$DOTFILES/.gitconfig" ~/.gitconfig
+    echo "Linked .gitconfig"
+  fi
+
+  # profile (zsh uses .zprofile)
+  if [ -f "$DOTFILES/.profile" ]; then
+    rm -f ~/.zprofile
+    ln -s "$DOTFILES/.profile" ~/.zprofile
+    echo "Linked .profile → .zprofile"
+  fi
+fi
+
+# -----------------------------------------------------------------------------
+# tmux plugin manager (tpm)
+# -----------------------------------------------------------------------------
+
+read -p "Install tmux plugin manager (tpm) and plugins? [y/n] " -n 1 -r
+echo
+if [[ ${REPLY:-y} =~ ^[Yy]$ ]]; then
+  if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+  else
+    echo "tpm already installed, skipping."
+  fi
+
+  # Install plugins headlessly
+  ~/.tmux/plugins/tpm/scripts/install_plugins.sh
+  echo ""
+  echo "tmux plugins installed."
+  echo "If you open tmux and icons look wrong, make sure the Nerd Font is set in iTerm2."
+  echo "You can also run 'prefix + I' inside tmux to reinstall plugins."
+fi
+
+# -----------------------------------------------------------------------------
+# SSH key for GitHub
+# -----------------------------------------------------------------------------
+
+read -p "Set up SSH key for GitHub? [y/n] " -n 1 -r
+echo
+if [[ ${REPLY:-y} =~ ^[Yy]$ ]]; then
+  if [ ! -f "$HOME/.ssh/id_ed25519" ]; then
+    read -p "Enter your email for SSH key: " ssh_email
+    ssh-keygen -t ed25519 -C "$ssh_email"
+  else
+    echo "SSH key already exists, skipping keygen."
+  fi
+
+  # Add to agent and keychain
+  eval "$(ssh-agent -s)"
+  ssh-add --apple-use-keychain ~/.ssh/id_ed25519
+
+  # Ensure SSH config persists key across restarts
+  mkdir -p ~/.ssh
+  if ! grep -q "github.com" ~/.ssh/config 2>/dev/null; then
+    cat >> ~/.ssh/config <<EOF
+
+Host github.com
+  AddKeysToAgent yes
+  UseKeychain yes
+  IdentityFile ~/.ssh/id_ed25519
+EOF
+    echo "Added GitHub SSH config to ~/.ssh/config"
+  fi
+
+  echo ""
+  echo "Your public key:"
+  cat ~/.ssh/id_ed25519.pub
+  echo ""
+  echo "No need to add this manually — the next step (gh auth login) will"
+  echo "offer to upload it to GitHub for you. Just choose SSH and select this key."
+fi
+
+# -----------------------------------------------------------------------------
+# GitHub CLI auth
+#
+# NOTE: This runs AFTER the SSH key setup above on purpose. When prompted,
+# choose SSH as the protocol and gh will offer to upload the key created
+# above to GitHub — so you don't need to add it manually in Settings → SSH keys.
+# -----------------------------------------------------------------------------
+
+read -p "Authenticate with GitHub CLI (gh auth login)? [y/n] " -n 1 -r
+echo
+if [[ ${REPLY:-y} =~ ^[Yy]$ ]]; then
+  gh auth login
+  echo ""
+  echo "When prompted, choose SSH as your preferred protocol and let gh upload"
+  echo "the SSH key created in the previous step (no manual add needed)."
+fi
+
+# -----------------------------------------------------------------------------
+# VS Code CLI
+# -----------------------------------------------------------------------------
+
+echo ""
+echo "NOTE: To enable 'code .' in terminal for VS Code:"
+echo "  1. Open VS Code"
+echo "  2. Cmd+Shift+P → 'Shell Command: Install code command in PATH'"
+
+# -----------------------------------------------------------------------------
+# Done
+# -----------------------------------------------------------------------------
+
+echo ""
+echo "================================================="
+echo "  Setup complete! Next steps:"
+echo "================================================="
+echo ""
+echo "1. Restart your terminal (or run: source ~/.zshrc)"
+echo "2. Open iTerm2 and set font to DroidSansM Nerd Font"
+echo "   Settings → Profiles → Text → Font"
+echo "3. Open tmux and run prefix + I to confirm plugins"
+echo "4. Open nvim — plugins will install on first launch"
+echo "5. Set git identity if not in your .gitconfig:"
+echo "   git config --global user.name 'Your Name'"
+echo "   git config --global user.email 'your@email.com'"
+echo ""
