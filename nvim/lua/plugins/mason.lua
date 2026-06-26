@@ -1,30 +1,16 @@
 return {
-  -- add any tools you want to have installed below
+  -- NOTE: language servers (vtsls, pyright, ruff, rust-analyzer, tailwindcss,
+  -- astro, etc.) are installed automatically by the LazyVim language extras
+  -- imported in lua/config/lazy.lua. Only list extra CLI tools here that the
+  -- extras don't pull in themselves.
   {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     opts = {
       ensure_installed = {
-        "shellcheck",
-        "shfmt",
-
-        -- LSPs
-        "typescript-language-server",
-        "html-lsp",
-        "css-lsp",
-        "tailwindcss-language-server",
-        "astro-language-server",
-        "emmet-ls",
-        "pyright",
-        "rust-analyzer",
-
-        -- null-ls
-        "prettier", -- ts/js formatter
-        "stylua", -- lua formatter
-        "eslint_d", -- ts/js linter
-        "black", -- python formatter
-        "mypy", -- python static analyzer
-        "ruff", -- python linter
-        "rustfmt", -- rust formatter
+        "stylua", -- lua formatter (conform)
+        "shfmt", -- shell formatter (conform)
+        "shellcheck", -- shell linter
+        "mypy", -- python type checker (nvim-lint, see linting.lua)
       },
     },
   },
