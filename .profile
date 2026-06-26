@@ -32,27 +32,27 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
-export PATH="$HOME/.poetry/bin:$PATH"
-. "$HOME/.cargo/env"
+# export PATH="$HOME/.poetry/bin:$PATH"
+# . "$HOME/.cargo/env"
 
 source ~/.nvm/nvm.sh
 
 export EDITOR='nvim'
 export VISUAL='nvim'
 
-# spark
-SPARK_DIR=~/.local/lib/spark
-if [ -d "$DIRECTORY" ]; then
-    export SPARK_HOME=$SPARK_DIR
-    export PATH=$PATH:$SPARK_HOME/bin
-fi
+# # spark
+# SPARK_DIR=~/.local/lib/spark
+# if [ -d "$DIRECTORY" ]; then
+#     export SPARK_HOME=$SPARK_DIR
+#     export PATH=$PATH:$SPARK_HOME/bin
+# fi
 
-# pyenv
-PYENV_DIR="$HOME/.pyenv"
-if [ -d "$DIRECTORY" ]; then
-    export PYENV_ROOT=$PYENV_DIR
-    [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-    eval "$(pyenv init -)"
-fi
+# # pyenv
+# PYENV_DIR="$HOME/.pyenv"
+# if [ -d "$DIRECTORY" ]; then
+#     export PYENV_ROOT=$PYENV_DIR
+#     [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+#     eval "$(pyenv init -)"
+# fi
 
 
