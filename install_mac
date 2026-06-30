@@ -81,10 +81,13 @@ fi
 # Core tools
 # -----------------------------------------------------------------------------
 
-read -p "Install core tools (git, gh, tmux, neovim, fzf, wget)? [y/n] " -n 1 -r
+read -p "Install core tools (git, gh, tmux, neovim, fzf, fd, wget)? [y/n] " -n 1 -r
 echo
 if [[ ${REPLY:-y} =~ ^[Yy]$ ]]; then
-  brew install git gh tmux neovim fzf wget
+  # fd + ripgrep: required by neovim's pickers (snacks/telescope). fd finds
+  # files by name, ripgrep (rg) searches file contents (live grep). Both are
+  # prebuilt brew binaries — no Rust toolchain needed despite being Rust tools.
+  brew install git gh tmux neovim fzf fd ripgrep wget
 
   # Install GNU versions of sed/grep (Linux-compatible flags)
   brew install gnu-sed grep
