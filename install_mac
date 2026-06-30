@@ -88,6 +88,12 @@ if [[ ${REPLY:-y} =~ ^[Yy]$ ]]; then
 
   # Install GNU versions of sed/grep (Linux-compatible flags)
   brew install gnu-sed grep
+
+  echo ""
+  echo "NOTE: neovim needs Node installed to work properly. Many of its mason"
+  echo "language servers (json-lsp, vtsls, tailwindcss, pyright, prettier...) are"
+  echo "npm packages and will fail to install if 'npm' isn't on PATH. Make sure"
+  echo "you say yes to the nvm + Node 24 step further down."
 fi
 
 # -----------------------------------------------------------------------------
@@ -153,10 +159,22 @@ fi
 # Node (nvm)
 # -----------------------------------------------------------------------------
 
-read -p "Install nvm (Node version manager)? [y/n] " -n 1 -r
+read -p "Install nvm (Node version manager) + Node 24? [y/n] " -n 1 -r
 echo
 if [[ ${REPLY:-y} =~ ^[Yy]$ ]]; then
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+
+  # Load nvm into this shell so we can install Node straight away
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+  # Node 24 is required for neovim: mason installs its language servers
+  # (json-lsp, vtsls, tailwindcss, pyright, yaml-language-server, prettier...)
+  # via npm. Without node on PATH every install silently fails.
+  nvm install 24
+  nvm alias default 24
+  nvm use default
+  echo "Installed Node $(node --version) and set it as the nvm default."
 fi
 
 # -----------------------------------------------------------------------------
