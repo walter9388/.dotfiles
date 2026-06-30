@@ -188,6 +188,19 @@ if [[ ${REPLY:-y} =~ ^[Yy]$ ]]; then
 fi
 
 # -----------------------------------------------------------------------------
+# AWS CLI
+# -----------------------------------------------------------------------------
+
+read -p "Install AWS CLI? [y/n] " -n 1 -r
+echo
+if [[ ${REPLY:-y} =~ ^[Yy]$ ]]; then
+  brew install awscli
+  echo ""
+  echo "AWS CLI installed. Configure credentials with 'aws configure'"
+  echo "(or 'aws configure sso' if your org uses SSO)."
+fi
+
+# -----------------------------------------------------------------------------
 # Rust (needed for tree-sitter in neovim)
 # Uncomment to enable
 # -----------------------------------------------------------------------------
