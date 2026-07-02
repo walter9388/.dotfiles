@@ -273,6 +273,16 @@ if [[ ${REPLY:-y} =~ ^[Yy]$ ]]; then
     echo "Linked nvim config"
   fi
 
+  # karabiner (external keyboard remaps — Vortex Tab 90M ISO)
+  # Symlink only the json file, not the whole dir: karabiner also stores
+  # machine-local assets/ and automatic_backups/ we don't want in the repo.
+  if [ -f "$DOTFILES/karabiner/karabiner.json" ]; then
+    mkdir -p ~/.config/karabiner
+    rm -f ~/.config/karabiner/karabiner.json
+    ln -s "$DOTFILES/karabiner/karabiner.json" ~/.config/karabiner/karabiner.json
+    echo "Linked karabiner.json"
+  fi
+
   # git
   if [ -f "$DOTFILES/.gitconfig" ]; then
     rm -f ~/.gitconfig
