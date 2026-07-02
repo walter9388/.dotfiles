@@ -17,6 +17,17 @@ report different IDs for the same keyboard.
 |-----------------------|--------------|------------|-----------|------------|
 | Vortex Tab 90M ISO    | UK / ISO     | USB        | 1241      | 838        |
 
+## Reloading the config
+
+Karabiner normally picks up edits to `karabiner.json` live. But because this
+file is a **symlink** into the dotfiles repo, Karabiner doesn't always notice
+changes written through it. If an edit doesn't take effect, restart the
+Karabiner server:
+
+```sh
+launchctl kickstart -k gui/$(id -u)/org.pqrs.service.agent.karabiner_console_user_server
+```
+
 ## Adding a new keyboard
 
 - **simple_modifications**: add a new entry to the `devices[]` array with the
