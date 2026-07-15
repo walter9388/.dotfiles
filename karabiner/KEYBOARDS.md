@@ -13,9 +13,10 @@ report different IDs for the same keyboard.
 
 ## Known keyboards
 
-| Keyboard              | Layout       | Connection | vendor_id | product_id |
-|-----------------------|--------------|------------|-----------|------------|
-| Vortex Tab 90M ISO    | UK / ISO     | USB        | 1241      | 838        |
+| Keyboard                | Layout       | Connection      | vendor_id | product_id |
+|-------------------------|--------------|-----------------|-----------|------------|
+| Vortex Tab 90M ISO      | UK / ISO     | USB             | 1241      | 838        |
+| Dell Universal Receiver | UK / ISO     | USB (wireless)  | 16700     | 17667      |
 
 ## Reloading the config
 
