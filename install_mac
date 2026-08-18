@@ -81,13 +81,15 @@ fi
 # Core tools
 # -----------------------------------------------------------------------------
 
-read -p "Install core tools (git, gh, tmux, neovim, fzf, fd, wget)? [y/n] " -n 1 -r
+read -p "Install core tools (git, gh, herdr, tmux, neovim, fzf, fd, wget)? [y/n] " -n 1 -r
 echo
 if [[ ${REPLY:-y} =~ ^[Yy]$ ]]; then
   # fd + ripgrep: required by neovim's pickers (snacks/telescope). fd finds
   # files by name, ripgrep (rg) searches file contents (live grep). Both are
   # prebuilt brew binaries — no Rust toolchain needed despite being Rust tools.
-  brew install git gh tmux neovim fzf fd ripgrep wget
+  # herdr is the terminal workspace manager that replaces tmux. tmux is kept
+  # installed for now so the old .tmux.conf still works if you fall back.
+  brew install git gh herdr tmux neovim fzf fd ripgrep wget
 
   # Install GNU versions of sed/grep (Linux-compatible flags)
   brew install gnu-sed grep
@@ -273,6 +275,16 @@ if [[ ${REPLY:-y} =~ ^[Yy]$ ]]; then
     echo "Linked nvim config"
   fi
 
+  # herdr (replaces tmux). Symlink only config.toml: herdr keeps machine-local
+  # state next to it in ~/.config/herdr (session.json, sockets, logs) that must
+  # not end up in the repo.
+  if [ -f "$DOTFILES/herdr/config.toml" ]; then
+    mkdir -p ~/.config/herdr
+    rm -f ~/.config/herdr/config.toml
+    ln -s "$DOTFILES/herdr/config.toml" ~/.config/herdr/config.toml
+    echo "Linked herdr config.toml"
+  fi
+
   # karabiner (external keyboard remaps — Vortex Tab 90M ISO)
   # Symlink only the json file, not the whole dir: karabiner also stores
   # machine-local assets/ and automatic_backups/ we don't want in the repo.
@@ -317,6 +329,31 @@ if [[ ${REPLY:-y} =~ ^[Yy]$ ]]; then
   echo "tmux plugins installed."
   echo "If you open tmux and icons look wrong, make sure the Nerd Font is set in iTerm2."
   echo "You can also run 'prefix + I' inside tmux to reinstall plugins."
+fi
+
+# -----------------------------------------------------------------------------
+# herdr plugins + agent integrations
+# -----------------------------------------------------------------------------
+
+read -p "Install herdr plugins and agent integrations? [y/n] " -n 1 -r
+echo
+if [[ ${REPLY:-y} =~ ^[Yy]$ ]]; then
+  # Seamless ctrl+hjkl navigation and prefix+hjkl resize across herdr panes and
+  # neovim splits. The neovim half is nvim/lua/plugins/herdr.lua.
+  herdr plugin install lmilojevicc/herdr-splits.nvim --yes
+
+  # Code review sidebar: review the agent's diff, comment on lines, send it
+  # back. prefix+r toggles it. The PR tab needs gh authenticated (see below).
+  herdr plugin install persiyanov/herdr-reviewr --yes
+
+  # Lets herdr read Claude's idle/working/blocked state, and is what
+  # resume_agents_on_restore needs to reopen conversations after a reboot.
+  herdr integration install claude
+
+  echo ""
+  echo "Check with: herdr plugin list && herdr integration status"
+  echo "For alt+hjkl resize inside neovim, set iTerm2 -> Settings -> Profiles"
+  echo "-> Keys -> Left Option key -> Esc+, or macOS eats them as accents."
 fi
 
 # -----------------------------------------------------------------------------
@@ -396,7 +433,8 @@ echo ""
 echo "1. Restart your terminal (or run: source ~/.zshrc)"
 echo "2. Open iTerm2 and set font to DroidSansM Nerd Font"
 echo "   Settings → Profiles → Text → Font"
-echo "3. Open tmux and run prefix + I to confirm plugins"
+echo "3. Run herdr to start a session (ctrl+b ? for keys, ctrl+b q to detach)"
+echo "   Validate the herdr config any time with: herdr config check"
 echo "4. Open nvim — plugins will install on first launch"
 echo "5. Set git identity if not in your .gitconfig:"
 echo "   git config --global user.name 'Your Name'"

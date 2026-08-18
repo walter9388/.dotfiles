@@ -173,3 +173,53 @@ export NVM_DIR="$HOME/.nvm"
 #   *) export PATH="$PNPM_HOME:$PATH" ;;
 # esac
 # # pnpm end
+
+# -----------------------------------------------------------------------------
+# herdr (terminal workspace manager — replacing tmux)
+# -----------------------------------------------------------------------------
+if whence -p herdr &>/dev/null; then
+  _herdr_bin=$(whence -p herdr)
+
+  # CLI tab-completion. `herdr completion zsh` emits ~1700 lines, so cache it
+  # and only regenerate when the binary changes rather than eval-ing on every
+  # shell start. Sourced rather than autoloaded because the generated script
+  # self-registers with `compdef`, which needs the compinit above to have run.
+  _herdr_comp="$HOME/.cache/zsh/completions/_herdr"
+  if [[ ! -f "$_herdr_comp" || "$_herdr_bin" -nt "$_herdr_comp" ]]; then
+    mkdir -p "${_herdr_comp:h}"
+    "$_herdr_bin" completion zsh >| "$_herdr_comp"
+  fi
+  source "$_herdr_comp"
+  unset _herdr_comp _herdr_bin
+
+  # iTerm2 detach fix (herdr 0.8.0).
+  # On detach herdr sends CSI = 15 u, which turns on every kitty-keyboard
+  # progressive-enhancement flag, then relies on CSI < 1 u popping the keyboard
+  # stack to undo it. iTerm2 doesn't honour that pop, so the flags stay live and
+  # every keypress arrives as a CSI-u escape sequence: the shell looks dead and
+  # the screen fills with junk. Zero the flags outright instead of trusting the
+  # stack. herdr does correctly restore mouse, bracketed paste and alt-screen,
+  # so this only needs to touch the keyboard protocol.
+  herdr() {
+    command herdr "$@"
+    local ret=$?
+    if [[ -t 1 ]]; then
+      # All three mechanisms, in this order, so the terminal lands on flags=0
+      # whichever subset it actually implements — no need to know which.
+      printf '\033[<u'        # pop herdr's stack entry
+      printf '\033[=0;1u'     # set current flags to 0
+      printf '\033[>0u'       # push a flags=0 entry
+      printf '\033[?1l\033>'  # normal cursor keys, numeric keypad
+    fi
+    return $ret
+  }
+
+  # Escape hatch for when a herdr client is killed rather than detached, or any
+  # other TUI leaves the terminal wedged.
+  fixterm() {
+    printf '\033[<u\033[=0;1u\033[>0u'                          # keyboard protocol
+    printf '\033[?1000l\033[?1002l\033[?1003l\033[?1006l\033[?1015l'  # mouse reporting
+    printf '\033[?2004l\033[?1004l\033[?1049l\033[?25h\033[?7h\033>'  # paste, focus, alt-screen, cursor
+    stty sane
+  }
+fi

@@ -1,0 +1,203 @@
+# =============================================================================
+# herdr configuration  —  ported from .tmux.conf
+# =============================================================================
+# Symlinked to ~/.config/herdr/config.toml by install_mac.
+# Validate after editing:  herdr config check
+# Apply to a running server: prefix+shift+r  (or: herdr server reload-config)
+#
+# Print the full annotated default config any time with: herdr --default-config
+# =============================================================================
+
+onboarding = false
+
+[theme]
+name = "catppuccin"
+
+# -----------------------------------------------------------------------------
+# Keys
+# -----------------------------------------------------------------------------
+# Bindings accept a list, so tmux muscle memory and the herdr defaults can
+# both stay live. "prefix+x" needs the prefix first; "ctrl+alt+x" is direct.
+
+auto_switch = false
+[keys]
+prefix = "ctrl+b"
+
+# Splits. herdr names splits after the divider, tmux after the direction:
+#   tmux 'bind | split-window -h'  (panes side by side) = split_vertical
+#   tmux 'bind - split-window -v'  (panes stacked)      = split_horizontal
+split_vertical = ["prefix+|", "prefix+v"]
+split_horizontal = ["prefix+minus"]
+
+# Pane focus fallback only. The real ctrl+hjkl navigation is the herdr-splits
+# plugin at the bottom of this file; these keep panes reachable if it is ever
+# disabled. Arrows rather than hjkl, because prefix+hjkl is resize (below),
+# exactly as it was in tmux.
+focus_pane_left = ["prefix+left", "ctrl+alt+h"]
+focus_pane_down = ["prefix+down", "ctrl+alt+j"]
+focus_pane_up = ["prefix+up", "ctrl+alt+k"]
+focus_pane_right = ["prefix+right"]
+
+# resize_mode is deliberately unbound: prefix+hjkl below resizes directly, the
+# way tmux did, which makes the interactive mode redundant and frees prefix+r
+# for reviewr. Restore it with:  resize_mode = "prefix+r"
+
+# Navigate mode (prefix+g). These are local to the picker and independent of
+# focus_pane_*. j/k move up and down the workspace list alongside the arrows.
+# Pane up/down move to ctrl+j/ctrl+k because j/k now belong to the workspace
+# list: herdr resolves that collision by keeping the workspace binding and
+# silently disabling the pane one, so they are moved rather than left to clash.
+navigate_workspace_up = ["k", "up"]
+navigate_workspace_down = ["j", "down"]
+navigate_pane_left = "h"
+navigate_pane_right = "l"
+navigate_pane_up = "ctrl+k"
+navigate_pane_down = "ctrl+j"
+
+# Zoom — tmux 'bind -r m resize-pane -Z'
+zoom = ["prefix+m", "prefix+z"]
+
+# Reload config — tmux 'bind r source-file ~/.tmux.conf'
+# prefix+r is resize mode above, so reload keeps the herdr default.
+reload_config = "prefix+shift+r"
+
+close_pane = "prefix+x"
+new_tab = "prefix+c"
+next_tab = "prefix+n"
+previous_tab = "prefix+p"
+
+# -----------------------------------------------------------------------------
+# UI
+# -----------------------------------------------------------------------------
+
+[ui]
+# tmux 'set -g mouse on'
+mouse_capture = true
+# tmux copy-mode-vi bound y to copy-selection; herdr copies on select instead.
+copy_on_select = true
+pane_borders = true
+
+# Sidebar agent rows. This is the native version of the catppuccin window-text
+# hack in .tmux.conf: Claude Code overwrites its process name with its version,
+# so tmux needed a regex to fall back to the pane title with the leading
+# spinner glyph stripped. herdr exposes that directly as terminal_title_stripped.
+show_agent_labels_on_pane_borders = true
+[ui.sidebar.agents]
+rows = [["state_icon", "workspace", "tab"], ["agent"]]
+
+[ui.sidebar.agents.rows_by_agent]
+claude = [
+  [
+    "state_icon",
+    "workspace",
+    "tab",
+  ],
+  [
+    "terminal_title_stripped",
+  ],
+  [
+    "agent",
+  ],
+]
+
+[ui.sidebar.spaces]
+rows = [["state_icon", "workspace"], ["branch", "git_status"]]
+
+# -----------------------------------------------------------------------------
+# Session persistence — replaces tmux-resurrect + tmux-continuum
+# -----------------------------------------------------------------------------
+# No plugins and no save/restore keybindings: herdr's server owns the session
+# and writes ~/.config/herdr/session.json continuously. Detaching keeps every
+# process running; a server restart replays workspaces, tabs, panes, cwds and
+# layout as fresh shells.
+
+[session]
+# Supported agents reopen their real conversation after a server restart.
+# (= tmux-resurrect for agents, which resurrect could never do.)
+resume_agents_on_restore = true
+
+[experimental]
+# Replay recent pane output after a full server restart.
+# = tmux '@resurrect-capture-pane-contents on'. Off by default upstream
+# because it persists scrollback to disk; enabled here to match tmux.
+pane_history = true
+
+# -----------------------------------------------------------------------------
+# herdr-splits plugin — replaces vim-tmux-navigator
+# -----------------------------------------------------------------------------
+#   herdr plugin install lmilojevicc/herdr-splits.nvim
+# Paired with nvim/lua/plugins/herdr.lua. herdr forwards these chords into
+# Neovim when a pane is running it, and moves between panes otherwise, so one
+# set of keys crosses both — the vim-tmux-navigator deal.
+#
+#   ctrl+hjkl    navigate, seamless across nvim splits and herdr panes
+#   prefix+hjkl  resize
+#
+# The resize half only works because of this plugin: herdr core has no
+# per-direction resize action, only the resize_mode above.
+#
+# Note: in a plain shell pane ctrl+l navigates instead of clearing the screen.
+# That was already true under vim-tmux-navigator.
+
+[[keys.command]]
+key = "ctrl+h"
+type = "plugin_action"
+command = "herdr-splits.nav-left"
+
+[[keys.command]]
+key = "ctrl+j"
+type = "plugin_action"
+command = "herdr-splits.nav-down"
+
+[[keys.command]]
+key = "ctrl+k"
+type = "plugin_action"
+command = "herdr-splits.nav-up"
+
+[[keys.command]]
+key = "ctrl+l"
+type = "plugin_action"
+command = "herdr-splits.nav-right"
+
+[[keys.command]]
+key = "prefix+h"
+type = "plugin_action"
+command = "herdr-splits.resize-left"
+
+[[keys.command]]
+key = "prefix+j"
+type = "plugin_action"
+command = "herdr-splits.resize-down"
+
+[[keys.command]]
+key = "prefix+k"
+type = "plugin_action"
+command = "herdr-splits.resize-up"
+
+[[keys.command]]
+key = "prefix+l"
+type = "plugin_action"
+command = "herdr-splits.resize-right"
+
+[ui.sound]
+enabled = false
+
+# -----------------------------------------------------------------------------
+# reviewr plugin — code review sidebar
+# -----------------------------------------------------------------------------
+#   herdr plugin install persiyanov/herdr-reviewr
+# Review the agent's diff, comment on lines, send it back; plus a read-only PR
+# view (needs gh authenticated). The pane's cwd must be a git repo or the
+# action fails with "not a git repo".
+#
+# The plugin's README suggests cmd+r, but iTerm2 keeps Cmd chords for itself,
+# so prefix+r it is — freed by unbinding resize_mode above.
+#
+# Plugin settings live in a separate file, created on first run:
+#   ~/.config/herdr/plugins/config/persiyanov.reviewr/config.toml
+# (theme, default_scope, navigator_position, auto_open, keybindings)
+
+[[keys.command]]
+key = "prefix+r"
+type = "plugin_action"
+command = "persiyanov.reviewr.toggle"

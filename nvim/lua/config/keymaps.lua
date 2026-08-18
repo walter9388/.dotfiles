@@ -136,10 +136,13 @@ nnoremap("<leader>d]", "<cmd>lua vim.diagnostic.goto_next()<CR>", { silent = tru
 -- If you don't want to use the telescope plug-in but still want to see all the errors/warnings, comment out the telescope line and uncomment this:
 -- nnoremap('<leader>dd', '<cmd>lua vim.diagnostic.setloclist()<CR>', { silent = true })
 
--- tmux
-nnoremap("<C-j>", ":TmuxNavigateDown<CR>", { silent = true })
-nnoremap("<C-k>", ":TmuxNavigateUp<CR>", { silent = true })
-nnoremap("<C-h>", ":TmuxNavigateLeft<CR>", { silent = true })
-nnoremap("<C-l>", ":TmuxNavigateRight<CR>", { silent = true })
+-- Pane/split navigation with <C-hjkl> is deliberately NOT mapped here.
+-- Whichever multiplexer we're in owns those keys, so they follow the
+-- environment instead of being hardcoded to one of them:
+--   herdr  -> plugins/herdr.lua (herdr-splits.nvim), gated on $HERDR_ENV
+--   tmux   -> plugins/tmux.lua (vim-tmux-navigator), gated on $TMUX
+-- Mapping them to :TmuxNavigate* unconditionally broke navigation inside
+-- herdr: vim-tmux-navigator isn't loaded there, so the command doesn't exist
+-- and the keypress silently did nothing.
 
 -- TODO: swap round default nvim-tree calls
