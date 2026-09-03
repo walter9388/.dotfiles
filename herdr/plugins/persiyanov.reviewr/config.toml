@@ -1,0 +1,15 @@
+# reviewr plugin settings.
+# Symlinked to ~/.config/herdr/plugins/config/persiyanov.reviewr/config.toml.
+# herdr's own config.toml never reaches this file. reviewr re-reads this on
+# every refresh and toggle, so edits apply without a relaunch.
+#
+# Careful: any unknown key, wrong type or invalid value makes the WHOLE file
+# invalid. reviewr applies none of it and shows a config error in the pane.
+# Check a change with:
+#   herdr plugin config-dir persiyanov.reviewr
+#   ~/.config/herdr/plugins/github/*reviewr*/bin/herdr-reviewr --resolve-plugin-config
+
+# Do not open a review pane by itself when a worktree is created. Open it with
+# prefix+r instead. herdr fires worktree.created and the plugin listens for it,
+# so without this a review pane appears on every new worktree.
+auto_open = false

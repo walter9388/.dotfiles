@@ -293,6 +293,16 @@ if [[ ${REPLY:-y} =~ ^[Yy]$ ]]; then
     echo "Linked herdr bin/"
   fi
 
+  # reviewr plugin settings. Its own file: herdr's config.toml never reaches it.
+  # Link only config.toml, because the plugin also keeps state in that directory.
+  if [ -f "$DOTFILES/herdr/plugins/persiyanov.reviewr/config.toml" ]; then
+    mkdir -p ~/.config/herdr/plugins/config/persiyanov.reviewr
+    rm -f ~/.config/herdr/plugins/config/persiyanov.reviewr/config.toml
+    ln -s "$DOTFILES/herdr/plugins/persiyanov.reviewr/config.toml" \
+      ~/.config/herdr/plugins/config/persiyanov.reviewr/config.toml
+    echo "Linked reviewr config.toml"
+  fi
+
   # karabiner (external keyboard remaps — Vortex Tab 90M ISO)
   # Symlink only the json file, not the whole dir: karabiner also stores
   # machine-local assets/ and automatic_backups/ we don't want in the repo.

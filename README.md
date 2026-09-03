@@ -101,9 +101,18 @@ hatch if that script is ever missing.
 | [reviewr](https://github.com/persiyanov/herdr-reviewr) | `prefix+r` | code review sidebar — comment on the agent's diff, send it back |
 
 reviewr needs the pane's cwd to be a git repo, and `gh` authenticated for its PR
-tab. Its own settings (theme, `default_scope`, `navigator_position`, `auto_open`)
-live in `~/.config/herdr/plugins/config/persiyanov.reviewr/config.toml`, created
-on first run — not currently tracked here.
+tab. Its own settings live in
+`herdr/plugins/persiyanov.reviewr/config.toml`, symlinked to
+`~/.config/herdr/plugins/config/persiyanov.reviewr/config.toml`. herdr's own
+`config.toml` never reaches that file.
+
+`auto_open = false` is set there. herdr fires a `worktree.created` event and
+reviewr listens for it, so by default a review pane appears on every new
+worktree. Open it with `prefix+r` instead.
+
+Careful with that file: one unknown key or invalid value makes the whole file
+invalid, and reviewr then applies none of it. Check a change with
+`~/.config/herdr/plugins/github/*reviewr*/bin/herdr-reviewr --resolve-plugin-config`.
 
 `prefix+r` was freed by unbinding `resize_mode`, which `prefix+hjkl` makes
 redundant. Restore it in `herdr/config.toml` if you miss it.
