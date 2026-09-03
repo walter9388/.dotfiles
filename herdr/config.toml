@@ -26,8 +26,11 @@ prefix = "ctrl+b"
 # Splits. herdr names splits after the divider, tmux after the direction:
 #   tmux 'bind | split-window -h'  (panes side by side) = split_vertical
 #   tmux 'bind - split-window -v'  (panes stacked)      = split_horizontal
-split_vertical = ["prefix+|", "prefix+v"]
-split_horizontal = ["prefix+minus"]
+# prefix+| and prefix+- are the worktree-aware splits defined at the bottom of
+# this file. These two are the raw built-in splits, kept as an escape hatch in
+# case that script is ever missing or broken.
+split_vertical = ["prefix+v"]
+split_horizontal = ["prefix+shift+v"]
 
 # Pane focus fallback only. The real ctrl+hjkl navigation is the herdr-splits
 # plugin at the bottom of this file; these keep panes reachable if it is ever
@@ -201,3 +204,27 @@ enabled = false
 key = "prefix+r"
 type = "plugin_action"
 command = "persiyanov.reviewr.toggle"
+
+# -----------------------------------------------------------------------------
+# Worktree-aware splits
+# -----------------------------------------------------------------------------
+# new_cwd = "follow" inherits the focused pane's *live* cwd, not the directory
+# the pane was spawned in. A long-running agent's cwd can drift out of the
+# worktree during a session: Claude Code's process cwd tracks its persistent
+# shell, so a cd anywhere in the session moves it for good. A split then lands
+# wherever that process ended up, not in the worktree. No new_cwd policy can
+# express "the workspace's worktree root", so these resolve it and pass an
+# explicit --cwd.
+#
+# Falls back to herdr's normal behaviour outside a worktree workspace, so it is
+# safe to have these on the primary split keys.
+
+[[keys.command]]
+key = "prefix+|"
+type = "shell"
+command = "$HOME/.config/herdr/bin/split-worktree.sh right"
+
+[[keys.command]]
+key = "prefix+minus"
+type = "shell"
+command = "$HOME/.config/herdr/bin/split-worktree.sh down"

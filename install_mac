@@ -285,6 +285,14 @@ if [[ ${REPLY:-y} =~ ^[Yy]$ ]]; then
     echo "Linked herdr config.toml"
   fi
 
+  # herdr helper scripts referenced by [[keys.command]] entries in config.toml
+  if [ -d "$DOTFILES/herdr/bin" ]; then
+    mkdir -p ~/.config/herdr
+    rm -rf ~/.config/herdr/bin
+    ln -s "$DOTFILES/herdr/bin" ~/.config/herdr/bin
+    echo "Linked herdr bin/"
+  fi
+
   # karabiner (external keyboard remaps — Vortex Tab 90M ISO)
   # Symlink only the json file, not the whole dir: karabiner also stores
   # machine-local assets/ and automatic_backups/ we don't want in the repo.

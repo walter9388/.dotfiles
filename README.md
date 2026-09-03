@@ -73,6 +73,26 @@ Things that needed no config, because herdr does them natively:
   Claude overwriting its process name with its version number. herdr exposes
   the stripped terminal title directly as `terminal_title_stripped`.
 
+### Worktree-aware splits
+
+`prefix+|` and `prefix+-` run `herdr/bin/split-worktree.sh` rather than herdr's
+built-in split. herdr's `new_cwd = "follow"` inherits the focused pane's *live*
+cwd, not the directory the pane was spawned in. A long-running agent's cwd can
+drift out of the worktree during a session — Claude Code's process cwd tracks
+its persistent shell, so a `cd` anywhere in the session moves it for good — and
+a split then lands wherever that process ended up.
+
+Plain `claude` does not itself leave a worktree; this is drift acquired during
+a session, so a Claude pane that has never been moved is unaffected.
+
+No `new_cwd` policy can express "this workspace's worktree root", so the script
+resolves it from `herdr workspace list` and passes an explicit `--cwd`. Outside
+a worktree workspace it falls back to the pane cwd herdr would have used, and
+with no context at all it still issues a plain split.
+
+`prefix+v` / `prefix+shift+v` stay bound to the raw built-in splits as an escape
+hatch if that script is ever missing.
+
 ### Plugins
 
 | plugin | key | what |
