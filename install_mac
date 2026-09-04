@@ -183,6 +183,23 @@ if [[ ${REPLY:-y} =~ ^[Yy]$ ]]; then
 fi
 
 # -----------------------------------------------------------------------------
+# Scala (sbt + Metals)
+# -----------------------------------------------------------------------------
+
+read -p "Install the Scala toolchain (JDK 17, sbt, scala-cli, coursier)? [y/n] " -n 1 -r
+echo
+if [[ ${REPLY:-y} =~ ^[Yy]$ ]]; then
+  # JDK 17 to match the Scala 2.13 sbt projects. Homebrew's openjdk is keg-only,
+  # so .zshrc sets JAVA_HOME and PATH; nothing lands in /Library/Java.
+  # coursier is what nvim-metals uses to download and update Metals itself.
+  brew install openjdk@17 sbt scala scala-cli coursier
+
+  echo ""
+  echo "Open a new shell, then check: java -version && cs --help"
+  echo "In neovim, open a .scala file and Metals installs itself on first use."
+fi
+
+# -----------------------------------------------------------------------------
 # Python (uv)
 # -----------------------------------------------------------------------------
 

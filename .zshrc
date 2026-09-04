@@ -223,3 +223,16 @@ if whence -p herdr &>/dev/null; then
     stty sane
   }
 fi
+
+# -----------------------------------------------------------------------------
+# Java / Scala
+# -----------------------------------------------------------------------------
+# Homebrew's openjdk is keg-only, so macOS's /usr/libexec/java_home never sees
+# it and `java` falls through to the Apple stub, which reports "Unable to locate
+# a Java Runtime". Point JAVA_HOME at the JDK and put it first on PATH.
+# JDK 17, not the newer openjdk, because the sbt projects here are Scala 2.13.
+# Metals (the Scala LSP, via nvim-metals) needs this too.
+if [ -d /opt/homebrew/opt/openjdk@17 ]; then
+  export JAVA_HOME=/opt/homebrew/opt/openjdk@17
+  export PATH="$JAVA_HOME/bin:$PATH"
+fi
