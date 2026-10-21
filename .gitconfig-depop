@@ -1,0 +1,4 @@
+[user]
+	email = alex.waldron@depop.com
+[core]
+	sshCommand = ssh -F /dev/null -i ~/.ssh/github_depop -o IdentitiesOnly=yes

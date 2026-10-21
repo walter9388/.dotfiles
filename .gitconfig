@@ -3,3 +3,9 @@
 	email = 51122673+walter9388@users.noreply.github.com
 [url "git@github.com:"]
 	insteadOf = https://github.com/
+# Depop work machine only. Delete these two includeIf blocks and .gitconfig-depop
+# when you use this config on a machine without Depop access.
+[includeIf "hasconfig:remote.*.url:git@github.com:depop/**"]
+	path = ~/.dotfiles/.gitconfig-depop
+[includeIf "hasconfig:remote.*.url:https://github.com/depop/**"]
+	path = ~/.dotfiles/.gitconfig-depop
