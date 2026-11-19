@@ -65,7 +65,7 @@
                   {
                     "key_code": "n",
                     "modifiers": [
-                      "left_option"
+                      "right_option"
                     ]
                   }
                 ],
@@ -99,7 +99,7 @@
                   {
                     "key_code": "3",
                     "modifiers": [
-                      "left_option"
+                      "right_option"
                     ]
                   }
                 ],

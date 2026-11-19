@@ -26,7 +26,7 @@ changes written through it. If an edit doesn't take effect, restart the
 Karabiner server:
 
 ```sh
-launchctl kickstart -k gui/$(id -u)/org.pqrs.service.agent.karabiner_console_user_server
+launchctl kickstart -k gui/$(id -u)/org.pqrs.service.agent.Karabiner-Console-User-Server
 ```
 
 ## Adding a new keyboard
