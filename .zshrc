@@ -162,6 +162,16 @@ _comp_options+=(globdots)               # Include hidden files.
 
 alias vim="nvim"
 
+# Homebrew needs a GitHub token (not SSH) to fetch release assets from Depop's
+# private tap, e.g. `brew install depop/tools/depop-cli`. Reuse the gh token.
+export HOMEBREW_GITHUB_API_TOKEN="$(gh auth token 2>/dev/null)"
+
+# AWS: some tools using the AWS SDK don't honour AWS_PROFILE directly, so load
+# the shared config file. Set a default profile and region for everyday work.
+export AWS_SDK_LOAD_CONFIG=1
+export AWS_DEFAULT_PROFILE=developer@auth-default  # use admin@auth-default for elevated access
+export AWS_DEFAULT_REGION=us-east-1
+
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
@@ -173,6 +183,10 @@ export NVM_DIR="$HOME/.nvm"
 #   *) export PATH="$PNPM_HOME:$PATH" ;;
 # esac
 # # pnpm end
+
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+export PATH="/Users/alex.waldron/.rd/bin:$PATH"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
 
 # -----------------------------------------------------------------------------
 # herdr (terminal workspace manager — replacing tmux)
@@ -235,4 +249,21 @@ fi
 if [ -d /opt/homebrew/opt/openjdk@17 ]; then
   export JAVA_HOME=/opt/homebrew/opt/openjdk@17
   export PATH="$JAVA_HOME/bin:$PATH"
+fi
+
+# Default `scala` and `scalac` to 2.13, to match the sbt projects here. Both
+# formulae are keg-only, so this PATH entry decides which one wins. The brew
+# `scala` formula is Scala 3 and is really the scala-cli runner; that one stays
+# available as `scala-cli`.
+#
+# Do NOT do this with an alias of `scala -S 2.13.18` instead. The -S flag
+# overrides a file's own `//> using scala` directive, so it silently breaks any
+# Scala 3 file.
+#
+# Trade-off: this `scala` is the classic runner. It has no `//> using`
+# directives, no .sc scripts and no `scala run`, but it does run a bare
+# top-level script as `scala File.scala`, the way older tutorials expect.
+# Use `scala-cli` when you want the directive-driven behaviour.
+if [ -d /opt/homebrew/opt/scala@2.13/bin ]; then
+  export PATH="/opt/homebrew/opt/scala@2.13/bin:$PATH"
 fi
